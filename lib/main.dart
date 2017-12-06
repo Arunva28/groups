@@ -43,64 +43,28 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        backgroundColor: Colors.white30,
+        backgroundColor: Colors.grey,
         appBar: new AppBar(
           title: new Text("Groups"),
         ),
         body:
             // This is the main page
-          new RefreshIndicator(
-            child: new ListView.builder(itemBuilder: _itemBuilder),
-            onRefresh: _onRefresh),
-          floatingActionButton: new FloatingActionButton(
+            new RefreshIndicator(
+                child: new ListView.builder(itemBuilder: _itemBuilder),
+                onRefresh: _onRefresh),
+        floatingActionButton: new FloatingActionButton(
             tooltip: 'Add',
-            backgroundColor: new Color(0x00FFFFFF),
             child: new Icon(Icons.add_location),
+            backgroundColor: Colors.grey,
             onPressed: _onFabPressed));
   }
 
   void _onFabPressed() {
-    showDialog(
-        context: context,
-        child: new SimpleDialog(
-          title: new Text("Do you want to check in?"),
-          children: <Widget>[
-            new TextFormField(
-              controller: _controller,
-              decoration: new InputDecoration(
-                hintText: 'Place Name',
-              ),
-            ),
-            new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                new ButtonTheme.bar(
-                  child: new ButtonBar(
-                    children: <Widget>[
-                      new FlatButton(
-                        child: const Text('PROCEED'),
-                        onPressed: _onYesPressed,
-                      ),
-                      new FlatButton(
-                        child: const Text('CANCEL'),
-                        onPressed: _onNoPressed,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ));
-  }
-
-  _onYesPressed() {
-    _saveData(new Request("101", "10"));
-    Navigator.pop(context);
-  }
-
-  void _onNoPressed() {
-    Navigator.pop(context);
+    Navigator.of(context).push(new MaterialPageRoute<Null>(
+        builder: (BuildContext context) {
+          return new AddEntryDialog();
+        },
+        fullscreenDialog: true));
   }
 
   Future<Null> _onRefresh() {
@@ -123,7 +87,7 @@ class _HomePageState extends State<HomePage> {
 
 const jsoncodec = const JsonCodec();
 
- _saveData(Request request) async {
+_saveData(Request request) async {
   var json = jsoncodec.encode(request);
 
   var url = "https://groups-66997.firebaseio.com/groups.json";
@@ -132,11 +96,6 @@ const jsoncodec = const JsonCodec();
   var response = await httpClient.post(url, body: json);
 
   print("response = " + response.body);
-
-
-
-
-
 }
 
 class CardWidget extends StatefulWidget {
@@ -152,6 +111,7 @@ class _CardWidgetState extends State<CardWidget> {
   @override
   Widget build(BuildContext context) {
     return new Card(
+      color: Colors.indigo,
       child: new ListTile(
         title: new Text(widget.cards.title),
         leading: new Text("Some Text"),
@@ -161,7 +121,64 @@ class _CardWidgetState extends State<CardWidget> {
     );
   }
 
-    _onTap() {
+  _onTap() {
+    Navigator.of(context).push(new MaterialPageRoute<Null>(
+        builder: (BuildContext context) {
+          var center = new Center(
+            child: new Container(
+              height: 100.0,
+              width: 100.0,
+              child: new Text("Hello"),
+            ),
+          );
+          return new Scaffold(
+            appBar: new AppBar(
+              title: new Text("New Title"),
+            ),
+            body: center = new Center(),
+          );
+        },
+        fullscreenDialog: true));
+  }
+}
 
+class AddEntryDialog extends StatefulWidget {
+  @override
+  AddEntryDialogState createState() => new AddEntryDialogState();
+}
+
+class AddEntryDialogState extends State<AddEntryDialog> {
+  @override
+  Widget build(BuildContext context) {
+    var _controller;
+    return new Scaffold(
+        appBar: new AppBar(
+          title: const Text('New entry'),
+          actions: [
+            new FlatButton(
+                onPressed: () {
+                  _saveData(new Request("101", "10"));
+                  Navigator.pop(context);
+                },
+                child: new Text('SAVE',
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .subhead
+                        .copyWith(color: Colors.white))),
+          ],
+        ),
+        body: new Container(
+          child: new Column(
+            children: <Widget>[
+              new TextField(
+                controller: _controller,
+                decoration: new InputDecoration(
+                  hintText: 'Type something',
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 }

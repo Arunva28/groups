@@ -1,5 +1,9 @@
 [
     {
+        "merged": "/Users/arun/workspace/Flutter/groups/build/app/intermediates/res/merged/debug/mipmap-hdpi/ic_launcher.png",
+        "source": "/Users/arun/workspace/Flutter/groups/android/app/src/main/res/mipmap-hdpi/ic_launcher.png"
+    },
+    {
         "merged": "/Users/arun/groups/build/app/intermediates/res/merged/debug/mipmap-hdpi/ic_launcher.png",
         "source": "/Users/arun/groups/android/app/src/main/res/mipmap-hdpi/ic_launcher.png"
     }
